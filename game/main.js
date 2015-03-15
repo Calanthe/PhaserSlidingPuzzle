@@ -46,11 +46,21 @@ function prepareBoard() {
       piece.name = 'piece' + i.toString() + 'x' + j.toString();
       piece.currentIndex = shuffledIndexArray[piecesIndex];
       piece.destIndex = piecesIndex;
+     // piece.events.onInputDown = selectGem;
+      console.log(piece.events, piece.events.onInputDown);
+      piece.inputEnabled = true;
+      piece.events.onInputDown.add(selectGem, this);
+      piece.posX = i;
+      piece.posY = j;
+      //piece.id = calcGemId(posX, posY);
       piecesIndex++;
-      console.log(piece);
     }
   }
 
+}
+
+function selectGem(sss) {
+    console.log(sss);
 }
 
 function createShuffledIndexArray() {
