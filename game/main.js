@@ -36,7 +36,7 @@ function prepareBoard() {
   {
     for (j = 0; j < BOARD_ROWS; j++)
     {
-      if (shuffledIndexArray[piecesIndex] !== piecesAmount-1) {
+      if (shuffledIndexArray[piecesIndex] !== piecesAmount - 1) {
           piece = piecesGroup.create(i * PIECE_SIZE, j * PIECE_SIZE, "background", shuffledIndexArray[piecesIndex]);
       }
       else { //initial position of black piece
@@ -44,23 +44,52 @@ function prepareBoard() {
           piece.black = true;
       }
       piece.name = 'piece' + i.toString() + 'x' + j.toString();
-      piece.currentIndex = shuffledIndexArray[piecesIndex];
-      piece.destIndex = piecesIndex;
-     // piece.events.onInputDown = selectGem;
-      console.log(piece.events, piece.events.onInputDown);
+      piece.currentIndex = piecesIndex;
+      piece.destIndex = shuffledIndexArray[piecesIndex];
       piece.inputEnabled = true;
-      piece.events.onInputDown.add(selectGem, this);
+      piece.events.onInputDown.add(selectPiece, this);
       piece.posX = i;
       piece.posY = j;
-      //piece.id = calcGemId(posX, posY);
       piecesIndex++;
     }
   }
 
 }
 
-function selectGem(sss) {
-    console.log(sss);
+function selectPiece(piece) {
+    //console.log(piece);
+    var foundBlackPiece = canMove(piece);
+    if (foundBlackPiece) {
+      movePiece(piece, foundBlackPiece);
+    }
+}
+
+function canMove(piece) {
+    /*if (piece.posX === 0) {
+      console.log('on the left edge');
+    }
+    if (((piece.posX + 1) % BOARD_COLS) === 0) {
+      console.log('on the right edge');
+    }
+    if (piece.posY === 0) {
+      console.log('on the top edge');
+    }
+    if (((piece.posY + 1) % BOARD_ROWS) === 0) {
+      console.log('on the bottom edge');
+    }*/
+  console.log(piece);
+    piecesGroup.children.forEach(function(element) {
+
+      if (element.posX === (piece.posX - 1) && element.posY === piece.posY && element.black ||
+          element.posX === (piece.posX + 1) && element.posY === piece.posY && element.black ||
+          element.posY === (piece.posY - 1) && element.posX === piece.posX && element.black ||
+          element.posY === (piece.posY + 1) && element.posX === piece.posX && element.black) {
+        console.log('found black element: ', element, 'original piece: ', piece);
+        return element;
+      }
+    });
+
+  return false;
 }
 
 function createShuffledIndexArray() {
