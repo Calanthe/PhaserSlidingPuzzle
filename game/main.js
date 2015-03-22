@@ -57,7 +57,9 @@ function prepareBoard() {
 }
 
 function selectPiece(piece) {
+  console.log(piece);
     var blackPiece = canMove(piece);
+  console.log(piecesGroup.children);
 
     // if there is a black piece in neighborhood
     if (blackPiece) {
@@ -80,13 +82,18 @@ function canMove(piece) {
       console.log('on the bottom edge');
     }*/
     piecesGroup.children.forEach(function(element) {
-      console.log(piece, element);
+      /*console.log('piece: ', piece, piece.posX);
+
+      console.log('element.posX: ', element.posX);
+      console.log('piece.posX - 1', piece.posX - 1);
+      console.log('piece.posX + 1', piece.posX + 1);
+      console.log('element.posY: ', element.posY);*/
       if (element.posX === (piece.posX - 1) && element.posY === piece.posY && element.black ||
           element.posX === (piece.posX + 1) && element.posY === piece.posY && element.black ||
           element.posY === (piece.posY - 1) && element.posX === piece.posX && element.black ||
           element.posY === (piece.posY + 1) && element.posX === piece.posX && element.black) {
             foundBlackElem = element;
-        console.log('found black item: ', element);
+        //console.log('found black item: ', element);
             return;
       }
     });
@@ -96,6 +103,7 @@ function canMove(piece) {
 
 function movePiece(piece, blackPiece) {
   console.log('old blackPiece: ', blackPiece);
+  console.log('old piece: ', piece);
   game.add.tween(piece).to({x: blackPiece.posX * PIECE_SIZE, y: blackPiece.posY * PIECE_SIZE}, 300, Phaser.Easing.Linear.None, true);
   var tmpPieceX = piece.posX;
   var tmpPieceY = piece.posY;
@@ -103,16 +111,21 @@ function movePiece(piece, blackPiece) {
   piece.posX = blackPiece.posX;
   piece.posY = blackPiece.posY;
   piece.currentIndex = blackPiece.currentIndex;
-  piece.black = true;
+  //piece.black = true;
+  piece.name ='piece' + piece.posX.toString() + 'x' + piece.posY.toString();
 
   //piece is the new black
   //console.log(tmpPiece);
   blackPiece.posX = tmpPieceX;
   blackPiece.posY = tmpPieceY;
   blackPiece.currentIndex = tmpcurrentIndex;
-  blackPiece.black = false;
+  //blackPiece.black = false;
+  blackPiece.name ='piece' + tmpPieceX.toString() + 'x' + tmpPieceY.toString();
 
   console.log('new blackPiece: ', blackPiece);
+  console.log('new piece: ', piece);
+
+  console.log(piecesGroup.children);
 }
 
 function createShuffledIndexArray() {
