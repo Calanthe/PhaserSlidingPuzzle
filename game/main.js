@@ -32,15 +32,15 @@ function prepareBoard() {
 
   piecesGroup = game.add.group();
 
-  for (i = 0; i < BOARD_COLS; i++)
+  for (i = 0; i < BOARD_ROWS; i++)
   {
-    for (j = 0; j < BOARD_ROWS; j++)
+    for (j = 0; j < BOARD_COLS; j++)
     {
       if (shuffledIndexArray[piecesIndex] !== piecesAmount - 1) {
-          piece = piecesGroup.create(i * PIECE_SIZE, j * PIECE_SIZE, "background", shuffledIndexArray[piecesIndex]);
+          piece = piecesGroup.create(j * PIECE_SIZE, i * PIECE_SIZE, "background", shuffledIndexArray[piecesIndex]);
       }
       else { //initial position of black piece
-          piece = piecesGroup.create(i * PIECE_SIZE, j * PIECE_SIZE);
+          piece = piecesGroup.create(j * PIECE_SIZE, i * PIECE_SIZE);
           piece.black = true;
       }
       piece.name = 'piece' + i.toString() + 'x' + j.toString();
@@ -88,7 +88,7 @@ function movePiece(piece, blackPiece) {
     currentIndex: piece.currentIndex
   };
 
-  game.add.tween(piece).to({x: blackPiece.posX * PIECE_SIZE, y: blackPiece.posY * PIECE_SIZE}, 300, Phaser.Easing.Linear.None, true);
+  game.add.tween(piece).to({x: blackPiece.posY * PIECE_SIZE, y: blackPiece.posX * PIECE_SIZE}, 300, Phaser.Easing.Linear.None, true);
 
   //change places of piece and blackPiece
   piece.posX = blackPiece.posX;
@@ -101,6 +101,24 @@ function movePiece(piece, blackPiece) {
   blackPiece.posY = tmpPiece.posY;
   blackPiece.currentIndex = tmpPiece.currentIndex;
   blackPiece.name ='piece' + blackPiece.posX.toString() + 'x' + blackPiece.posY.toString();
+
+  //after every move check if puzzle is completed
+  checkIfFinished();
+}
+
+function checkIfFinished() {
+  var isFinished = true;
+
+  piecesGroup.children.forEach(function(element) {
+    if (element.currentIndex !== element.destIndex) {
+      isFinished = false;
+      return;
+    }
+  });
+
+  if (isFinished) {
+   console.log('Finished!');
+  }
 }
 
 function createShuffledIndexArray() {
@@ -111,7 +129,8 @@ function createShuffledIndexArray() {
     indexArray.push(i);
   }
 
-  return shuffle(indexArray);
+  return indexArray;
+  //return shuffle(indexArray);
 }
 
 function shuffle(array) {
