@@ -48,8 +48,8 @@ function prepareBoard() {
       piece.destIndex = shuffledIndexArray[piecesIndex];
       piece.inputEnabled = true;
       piece.events.onInputDown.add(selectPiece, this);
-      piece.posX = i;
-      piece.posY = j;
+      piece.posX = j;
+      piece.posY = i;
       piecesIndex++;
     }
   }
@@ -88,7 +88,7 @@ function movePiece(piece, blackPiece) {
     currentIndex: piece.currentIndex
   };
 
-  game.add.tween(piece).to({x: blackPiece.posY * PIECE_SIZE, y: blackPiece.posX * PIECE_SIZE}, 300, Phaser.Easing.Linear.None, true);
+  game.add.tween(piece).to({x: blackPiece.posX * PIECE_SIZE, y: blackPiece.posY * PIECE_SIZE}, 300, Phaser.Easing.Linear.None, true);
 
   //change places of piece and blackPiece
   piece.posX = blackPiece.posX;
@@ -117,8 +117,15 @@ function checkIfFinished() {
   });
 
   if (isFinished) {
-   console.log('Finished!');
+    showFinishedText();
   }
+}
+
+function showFinishedText() {
+  var style = { font: "40px Arial", fill: "#000", align: "center"},
+      text = game.add.text(game.world.centerX, game.world.centerY, "Congratulations! \nYou made it!", style);
+
+  text.anchor.set(0.5);
 }
 
 function createShuffledIndexArray() {
