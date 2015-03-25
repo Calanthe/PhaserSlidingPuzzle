@@ -1,8 +1,9 @@
 'use strict';
 
-var game = new Phaser.Game(600, 866, Phaser.CANVAS, 'slidingpuzzle', { preload: preload, create: create });
+var game = new Phaser.Game(800, 600, Phaser.CANVAS, 'slidingpuzzle', { preload: preload, create: create });
 
-var PIECE_SIZE = 100,
+var PIECE_WIDTH = 200,
+    PIECE_HEIGHT = 200,
     BOARD_COLS,
     BOARD_ROWS;
 
@@ -11,7 +12,7 @@ var piecesGroup,
     shuffledIndexArray = [];
 
 function preload() {
-  game.load.spritesheet("background", "assets/Kepler_16b_screen_small.jpg", PIECE_SIZE, PIECE_SIZE);
+  game.load.spritesheet("background", "assets/bl.jpg", PIECE_WIDTH, PIECE_HEIGHT);
 }
 
 function create() {
@@ -23,8 +24,8 @@ function prepareBoard() {
       i, j,
       piece;
 
-  BOARD_COLS = Phaser.Math.floor(game.world.width / PIECE_SIZE);
-  BOARD_ROWS = Phaser.Math.floor(game.world.height / PIECE_SIZE);
+  BOARD_COLS = Phaser.Math.floor(game.world.width / PIECE_WIDTH);
+  BOARD_ROWS = Phaser.Math.floor(game.world.height / PIECE_HEIGHT);
 
   piecesAmount = BOARD_COLS * BOARD_ROWS;
 
@@ -36,11 +37,11 @@ function prepareBoard() {
   {
     for (j = 0; j < BOARD_COLS; j++)
     {
-      if (shuffledIndexArray[piecesIndex] !== piecesAmount - 1) {
-          piece = piecesGroup.create(j * PIECE_SIZE, i * PIECE_SIZE, "background", shuffledIndexArray[piecesIndex]);
+      if (shuffledIndexArray[piecesIndex]) {
+          piece = piecesGroup.create(j * PIECE_WIDTH, i * PIECE_HEIGHT, "background", shuffledIndexArray[piecesIndex]);
       }
       else { //initial position of black piece
-          piece = piecesGroup.create(j * PIECE_SIZE, i * PIECE_SIZE);
+          piece = piecesGroup.create(j * PIECE_WIDTH, i * PIECE_HEIGHT);
           piece.black = true;
       }
       piece.name = 'piece' + i.toString() + 'x' + j.toString();
@@ -88,7 +89,7 @@ function movePiece(piece, blackPiece) {
     currentIndex: piece.currentIndex
   };
 
-  game.add.tween(piece).to({x: blackPiece.posX * PIECE_SIZE, y: blackPiece.posY * PIECE_SIZE}, 300, Phaser.Easing.Linear.None, true);
+  game.add.tween(piece).to({x: blackPiece.posX * PIECE_WIDTH, y: blackPiece.posY * PIECE_HEIGHT}, 300, Phaser.Easing.Linear.None, true);
 
   //change places of piece and blackPiece
   piece.posX = blackPiece.posX;
@@ -136,8 +137,7 @@ function createShuffledIndexArray() {
     indexArray.push(i);
   }
 
-  return indexArray;
-  //return shuffle(indexArray);
+  return shuffle(indexArray);
 }
 
 function shuffle(array) {

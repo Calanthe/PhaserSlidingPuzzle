@@ -1,5 +1,5 @@
 {
   "projectName": "slidingPuzzle",
-  "gameWidth": "600",
-  "gameHeight": "800"
+  "gameWidth": "800",
+  "gameHeight": "600"
 }

@@ -4,7 +4,7 @@ body {
 
 #slidingpuzzle {
   border: 2px solid white;
-  width: Ypx;
+  width: 800px;
   margin-left: auto;
   margin-right: auto;
   cursor: pointer;
